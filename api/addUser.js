@@ -11,20 +11,21 @@ export default async function addUser(request) {
         const { username, password, email } = await request.json();
         const hash = await crypto.subtle.digest('SHA-256', stringToArrayBuffer(username + password + email));
         const hashed64 = arrayBufferToBase64(hash);
+
         const client = await db.connect();
 
-        // Utiliser prepared statements pour éviter les attaques par injection SQL
         const result = await client.query({
             text: 'SELECT * FROM users WHERE username = $1 AND password = $2',
             values: [username, hashed64],
         });
 
         if (result.rowCount !== 1) {
-            // Utiliser un seul await pour l'insertion et récupération de l'utilisateur
+            const externalId = crypto.randomUUID().toString();
             const insertResult = await client.query({
-                text: 'INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING *',
-                values: [username, hashed64, email],
+                text: 'INSERT INTO users (username, password, email, created_on, external_id) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, $4) RETURNING *',
+                values: [username, hashed64, email, externalId],
             });
+            
 
             const user = insertResult.rows[0];
             const token = crypto.randomUUID().toString();
