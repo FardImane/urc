@@ -1,25 +1,25 @@
-
-import React from 'react';
-import {NextUIProvider} from "@nextui-org/react";
-import { Routes, Route } from 'react-router-dom';
-import Welcome from './pages/HomePage';
-import LoginForm from './LogForm';
-import store from './store';
-import { Provider } from 'react-redux';
-import { Login } from './user/Login';
-import {addUser} from './inscription/addUser';
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
+
   return (
-    <Provider store={store}>
-    <NextUIProvider>
-      <Routes>
-      <Route path = "/" Component={Welcome} />
-      <Route path = "login" Component={Login} /> 
-      <Route path="addUser" Component={addUser}/>
-      </Routes>
-      </NextUIProvider>
-      </Provider>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 
