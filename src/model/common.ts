@@ -12,6 +12,12 @@ export interface User {
     external_id?: string;
 }
 
+export interface UserPost {
+    username: string;
+    email: string;
+    password: string;
+}
+
 export interface Session {
     token: string;
     username?: string;
@@ -19,6 +25,10 @@ export interface Session {
     externalId: string;
 }
 
+export interface SessionAddUser {
+   token: string,
+   message: string
+}
 
 export interface EmptyCallback {
     (): void;
