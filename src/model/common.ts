@@ -12,6 +12,22 @@ export interface User {
     external_id?: string;
 }
 
+export interface UserList {
+    users: User[];
+    
+}
+export interface ListUsersFunction {
+    (userList: UserList): void;
+  }
+
+// export interface UserList {
+//     (users:UserList): UserList;
+// }
+export interface SessionCallback {
+    (session: Session): void;
+}
+
+
 export interface UserPost {
     username: string;
     email: string;
@@ -34,12 +50,12 @@ export interface EmptyCallback {
     (): void;
 }
 
-export interface SessionCallback {
-    (session: Session): void;
-}
+
 
 
 export interface ErrorCallback {
     (error: CustomError): void;
 }
+
+
 

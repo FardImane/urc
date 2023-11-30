@@ -5,7 +5,7 @@ import {CustomError} from "../model/CustomError";
 export function loginUser(user: User, onResult: SessionCallback, onError: ErrorCallback) {
   
     fetch("/api/login",
-        {
+        {    
             method: "POST", // ou 'PUT'
             headers: {
                 "Content-Type": "application/json",

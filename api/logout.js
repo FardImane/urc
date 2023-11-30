@@ -1,4 +1,4 @@
-// import statements...
+import { response } from 'express';
 
 function logout(req, res) {
   // Assuming your logout logic here
@@ -6,6 +6,5 @@ function logout(req, res) {
   res.json({ message: 'User successfully logged out' });
 }
 
-router.post('/logout', logout);
 
 export default router;
