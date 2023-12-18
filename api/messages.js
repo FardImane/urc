@@ -5,24 +5,15 @@ import {db} from "@vercel/postgres";
 
 export default async (request, response) => {
     try {
-        // const headers = new Headers(request.headers);
+        const headers = new Headers(request.headers);
         // const user = await getConnecterUser(request);
         // if (user === undefined || user === null) {
         //     console.log("Not connected");
         //     triggerNotConnected(response);
         // }
-        //  const userId = request.body.user_id;
         const message  = await request.body;
         console.log("message :", message);
         const client = await db.connect();
-        await client.query("insert into messages ( content, created_on, sended_by, sended_to, room_id) values ( $1, $2, $3, $4, $5)", [
-            message.content,
-            new Date(),
-            message.sended_by,
-            message.sended_to,
-            message.room_id
-
-        ]);
         response.send("OK");
     } catch (error) {
         console.log(error);

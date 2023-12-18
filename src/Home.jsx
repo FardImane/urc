@@ -1,18 +1,26 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 // import { Link } from "react-router-dom";
-
+import { Link, Button } from "@nextui-org/react";
   
 export function Home() {
-    const location = useLocation();
-    const token = location.state?.token;
+    // const location = useLocation();
+    // const token = location.state?.token;
   return (
     <>
-     <nav>
-      {/* <Link to="/logout">Logout</Link> */}
-    </nav>
-      <p>Hello</p>
-      <p>Welcome Hoooo this is your token: {token} </p>
+    <p>Hello</p>
+      <p>Welcome  </p>
+     <Button
+      href="/login"
+      as={Link}
+      color="primary"
+      showAnchorIcon
+      variant="solid"
+    >
+      Login 
+    </Button>
+    
+     
 
     </>
   );

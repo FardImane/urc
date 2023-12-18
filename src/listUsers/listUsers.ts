@@ -1,36 +1,56 @@
-import {Session, SessionCallback, ErrorCallback, UserList, ListUsersFunction} from "../model/common";
-import {CustomError} from "../model/CustomError";
+import { ErrorCallback } from "../model/common";
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUsers } from '../authSlice';
 
-export function List(onResult:ListUsersFunction, onError:ErrorCallback){
-    const [session, setSession] = useState<{ token: string } | null>(null);
-    useEffect(() =>{
-        const storedSession = sessionStorage.getItem('session');
-        if (storedSession) {
-            const parsedSession = JSON.parse(storedSession);
-            setSession(parsedSession);
-          }
-    },[]);
+interface User {
+    user_id: number;
+    username: string;
+    last_login: string | null;
+}
 
-    fetch("api/users",
-    {
-        method:"POST",
-        headers:{
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(session?.token)
-    }
-    
-    ).then(async (response) => {
-        if (response.ok) {
-            const userList = await response.json() as UserList;
-            onResult(userList)
-        } else {
-            
-            const error = await response.json() as CustomError;
-            onError(error);
-        }
-    }, onError);
+interface UserList {
+    users: User[];
+}
 
+interface ListUsersFunction {
+    (userList: UserList): void;
+}
 
+interface ListProps {
+    onResult: ListUsersFunction;
+    onError: ErrorCallback;
+}
+
+export function List({ onResult, onError }: ListProps) {
+    const dispatch = useDispatch();
+    const [userList, setUserList] = useState<User[]>([]);
+
+    useEffect(() => {
+        fetch("api/listUsers", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(async (response) => {
+            if (response.ok) {
+                const users = await response.json() as User[];
+                setUserList(users);
+                const userListObject: UserList = { users };
+                onResult(userListObject);
+                dispatch(setUsers(users));
+            } else {
+                const error = await response.json();
+                onError({
+                    message: error.error,
+                    name: ""
+                }); 
+            }
+        }).catch(error => {
+            onError({
+                message: "An error occurred while fetching data.",
+                name: ""
+            });
+        });
+    }, [dispatch, onResult, onError]); // Effect will run once on component mount
 }

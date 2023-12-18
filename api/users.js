@@ -6,12 +6,12 @@ export const config = {
     runtime: 'edge',
 };
 
-export default async function handler(request) {
-    console.log("Request Object this:", request);
+export default async function handler() {
+     console.log("Request Object this:", request);
 
     try {
-        const checkSessionResult = await checkSession(request);
-        console.log("checkSession Result:", checkSessionResult);
+       const checkSessionResult = await checkSession(request);
+       console.log("checkSession Result:", checkSessionResult);
     
         if (!checkSessionResult) {
             console.log("Not connected");

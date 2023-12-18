@@ -9,7 +9,8 @@ export const config = {
 export default async function addUser(request) {
     try {
         const { username, password, email } = await request.json();
-        const hash = await crypto.subtle.digest('SHA-256', stringToArrayBuffer(username + password + email));
+
+        const hash = await crypto.subtle.digest('SHA-256', stringToArrayBuffer(username + password));
         const hashed64 = arrayBufferToBase64(hash);
 
         const client = await db.connect();
@@ -25,12 +26,11 @@ export default async function addUser(request) {
                 text: 'INSERT INTO users (username, password, email, created_on, external_id) VALUES ($1, $2, $3, CURRENT_TIMESTAMP, $4) RETURNING *',
                 values: [username, hashed64, email, externalId],
             });
-            
 
             const user = insertResult.rows[0];
             const token = crypto.randomUUID().toString();
 
-            await kv.set(token, user, { ttl: 3600 }); // Utiliser ttl au lieu de ex pour la durée de vie
+            await kv.set(token, user, { ttl: 3600 });
             const userInfo = {};
             userInfo[user.id] = user;
             await kv.hset("users", userInfo);
@@ -51,7 +51,6 @@ export default async function addUser(request) {
                 headers: { 'content-type': 'application/json' },
             });
         }
-
     } catch (error) {
         console.error(error);
         return new Response(JSON.stringify(error), {

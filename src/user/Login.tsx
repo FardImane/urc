@@ -9,7 +9,6 @@ import { EyeFilledIcon } from "../pages/component/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../pages/component/EyeSlashFilledIcon";
 import { Home } from "../Home";
 import { useNavigate } from "react-router-dom";
-
 export function Login() {
   const [error, setError] = useState({} as CustomError);
   const [session, setSession] = useState({} as Session);
@@ -34,7 +33,7 @@ export function Login() {
         setSession(result);
         form.reset();
         setError(new CustomError(""));
-        navigate("/home", { state: { token: result.token } });
+        navigate("/ListUser", { state: { token: result.token } });
       },
       (loginError: CustomError) => {
         console.log(loginError);
